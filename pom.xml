@@ -4,7 +4,7 @@
 
 	<groupId>com.gbi</groupId>
 	<artifactId>MongoDB-3</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>MongoDB-3</name>
