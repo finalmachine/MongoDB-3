@@ -2,6 +2,7 @@ package com.gbi.mongodb3.find;
 
 import org.bson.Document;
 
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -10,27 +11,24 @@ import com.mongodb.client.MongoDatabase;
 
 public class FindTest {
 	
-	private static void findTest1() {
+	public static void findTest1() {
 		// 连接数据库
 		MongoClient client = new MongoClient("127.0.0.1", 27017);
-		MongoDatabase db = client.getDatabase("test");
+		MongoDatabase db = client.getDatabase("TEST");
 		
-		MongoCollection<Document> collection =  db.getCollection("test_table1");
+		MongoCollection<Document> collection =  db.getCollection("source");
 		FindIterable<Document> resultSet = collection.find();
-		MongoCursor<Document> iterator = resultSet.iterator();
-
-		while (iterator.hasNext()) {
-			Document obj = iterator.next();
-			System.out.println(obj.get("_id"));
-			System.out.println(obj.get("name"));
-			System.out.println(obj.get("gender"));
-			System.out.println(obj.get("age"));
-		}
-		
+		resultSet.projection(new Document("_id", 1).append("name", 1));
+		resultSet.forEach(new Block<Document>() {
+			@Override
+			public void apply(Document t) {
+				System.out.println(t.toJson());
+			}
+		});
 		client.close();
 	}
 	
-	private static void findTest2() {
+	public static void findTest2() {
 		MongoClient client = new MongoClient("127.0.0.1", 27017);
 		MongoDatabase db = client.getDatabase("test");
 		
@@ -54,6 +52,6 @@ public class FindTest {
 	
 	public static void main(String[] args) {
 		findTest1();
-		findTest2();
+	//	findTest2();
 	}
 }
